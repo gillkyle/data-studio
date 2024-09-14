@@ -1,0 +1,32 @@
+{
+  "name": "particl-studio",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "vite --port=4000",
+    "build": "vite build",
+    "serve": "vite preview",
+    "start": "vite"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "^1.57.13",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.4"
+  },
+  "dependencies": {
+    "@observablehq/plot": "^0.6.16",
+    "@std/csv": "npm:@jsr/std__csv@^1.0.3",
+    "@tanstack/react-router": "^1.57.13",
+    "@tanstack/router-devtools": "^1.57.13",
+    "@tanstack/router-zod-adapter": "^1.57.13",
+    "@visx/responsive": "^3.10.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite-tsconfig-paths": "^5.0.1",
+    "zod": "^3.23.8"
+  }
+}
