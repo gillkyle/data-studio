@@ -1,7 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodSearchValidator } from "@tanstack/router-zod-adapter";
+import { TbShare2 } from "react-icons/tb";
 import { z } from "zod";
+import { Logo } from "~/components/Logo";
 import { PlotConfigurationForm } from "~/components/PlotConfigurationForm";
 import { StudioPlot } from "~/components/StudioPlot";
 import { csvSchema } from "~/core/zod-helpers";
@@ -46,19 +48,33 @@ function HomeComponent() {
           }}
           activeOptions={{ exact: true }}
         >
-          Studio
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              fontSize: 20,
+              fontWeight: 600,
+            }}
+          >
+            <Logo size={30} />
+            Data Studio
+          </Box>
         </Link>{" "}
-        <button>Share</button>
+        <Button variant="contained" startIcon={<TbShare2 size={16} />}>
+          Share
+        </Button>
       </Box>
       <Box sx={{ display: "flex", flex: 1, height: "calc(100% - 50px)" }}>
         <Box
           sx={{
             width: "350px",
             borderRight: (theme) => `1px solid ${theme.palette.divider}`,
-            p: 2,
+            p: 1,
             display: "flex",
             flexDirection: "column",
             overflowY: "auto",
+            gap: 1,
           }}
         >
           <PlotConfigurationForm />
@@ -66,7 +82,7 @@ function HomeComponent() {
         <Box
           sx={{
             flex: 1,
-            p: 2,
+            p: 1,
             height: "calc(100% - 50px)",
             backgroundColor: "background.paper",
           }}

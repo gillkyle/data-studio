@@ -22,9 +22,18 @@ export function PlotConfigurationForm() {
   } = useConfigurationState();
 
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 1,
+        ".MuiFormLabel-root": {
+          marginBottom: 0.5,
+        },
+      }}
+    >
       {/* Existing CSV Data input */}
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>CSV Data</FormLabel>
         <Box
           component={TextareaAutosize}
@@ -59,7 +68,7 @@ export function PlotConfigurationForm() {
       </Link>
 
       {/* Mark Configuration */}
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>Mark Type</FormLabel>
         <Select
           value={plotConfig.markType}
@@ -73,7 +82,7 @@ export function PlotConfigurationForm() {
         </Select>
       </FormControl>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>X Field</FormLabel>
         <Select
           value={plotConfig.xField}
@@ -87,7 +96,7 @@ export function PlotConfigurationForm() {
         </Select>
       </FormControl>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>Y Field</FormLabel>
         <Select
           value={plotConfig.yField}
@@ -101,7 +110,7 @@ export function PlotConfigurationForm() {
         </Select>
       </FormControl>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>Color</FormLabel>
         <Select
           value={plotConfig.colorField}
@@ -117,7 +126,7 @@ export function PlotConfigurationForm() {
       </FormControl>
 
       {/* Y-axis Tick Format */}
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>Y-axis Tick Format</FormLabel>
         <TextField
           value={plotConfig.yTickFormat}
@@ -127,7 +136,7 @@ export function PlotConfigurationForm() {
       </FormControl>
 
       {/* Preview Table */}
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth>
         <FormLabel>Preview</FormLabel>
         <Box
           sx={{
@@ -141,7 +150,7 @@ export function PlotConfigurationForm() {
           <PreviewTable />
         </Box>
       </FormControl>
-    </>
+    </Box>
   );
 }
 
