@@ -1,88 +1,88 @@
-import { parse } from "@std/csv/parse";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Box } from "@mui/material";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodSearchValidator } from "@tanstack/router-zod-adapter";
-import * as React from "react";
 import { z } from "zod";
-import { ObservablePlot } from "~/components/ObservablePlot";
+import { PlotConfigurationForm } from "~/components/PlotConfigurationForm";
+import { StudioPlot } from "~/components/StudioPlot";
 import { csvSchema } from "~/core/zod-helpers";
+import { useConfigurationState } from "~/hooks/useConfigurationState";
 
 const studioConfigSchema = z.object({
   data: csvSchema.catch("").default(""),
+  markType: z.enum(["barY", "rectY", "line", "cell", "dot"]).default("barY"),
+  xField: z.string().default(""),
+  yField: z.string().default(""),
+  colorField: z.string().default(""),
+  yTickFormat: z.string().default(""),
 });
-
-type StudioConfig = z.infer<typeof studioConfigSchema>;
+export type StudioConfig = z.infer<typeof studioConfigSchema>;
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
   validateSearch: zodSearchValidator(studioConfigSchema),
 });
+Route.useSearch;
 
 function HomeComponent() {
-  const navigate = useNavigate({ from: Route.fullPath });
-  const { data } = Route.useSearch();
-
-  // convert the CSV in the string into JSON
-  const parsedData = React.useMemo(() => {
-    if (!data) return [];
-    return parse(data, { skipFirstRow: true });
-  }, [data]);
-  // convert the headers from the CSV into a list
-  const parsedFields = React.useMemo(() => {
-    if (!data) return [];
-    return parse(data)[0];
-  }, [data]);
-  console.log(parsedFields);
+  const { activeData, activeFields, plotConfig } = useConfigurationState();
 
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-      <div>
-        <Link
-          to="/"
-          search={{
-            data: "name,age\nJohn,20\nJane,21",
-          }}
-        >
-          Try Dummy CSV
-        </Link>
-      </div>
-      <textarea
-        defaultValue={data}
-        onChange={(e) => {
-          navigate({
-            search: (prev) => ({
-              data: e.target.value,
-            }),
-          });
-        }}
-      />
-      <div
-        style={{
-          width: "100%",
-          height: "500px",
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box
+        sx={{
+          p: 1,
+          display: "flex",
+          gap: 2,
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          minHeight: "50px",
         }}
       >
-        <ObservablePlot
-          data={parsedData}
-          xField={parsedFields[0]}
-          yField={parsedFields[1]}
-        />
-      </div>
-    </div>
+        <Link
+          to="/"
+          activeProps={{
+            className: "font-bold",
+          }}
+          activeOptions={{ exact: true }}
+        >
+          Studio
+        </Link>{" "}
+        <button>Share</button>
+      </Box>
+      <Box sx={{ display: "flex", flex: 1, height: "calc(100% - 50px)" }}>
+        <Box
+          sx={{
+            width: "350px",
+            borderRight: (theme) => `1px solid ${theme.palette.divider}`,
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            overflowY: "auto",
+          }}
+        >
+          <PlotConfigurationForm />
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            p: 2,
+            height: "calc(100% - 50px)",
+            backgroundColor: "background.paper",
+          }}
+        >
+          <StudioPlot
+            data={activeData}
+            studioOptions={{
+              xField: plotConfig.xField || activeFields[0],
+              yField: plotConfig.yField || activeFields[1],
+              markType: plotConfig.markType,
+              colorField: plotConfig.colorField,
+              yTickFormat: plotConfig.yTickFormat,
+            }}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 }
-
-/* 
-Each Plot can render multiple marks. 
-
-A single Mark Configuration option would that should be configurable via the UI:
-- mark function type: barY, line, cell, dot, etc.
-- xField: keyof T
-- yField: keyof T
-- strokeField?: keyof T (which colors it)
-- fillField?: keyof T (which colors it in other cases, maybe these become one color config in the UI)
-
-General plot configuration options:
-- y
-  - tickFormat like Plot.formatMonth("en", "short")
-*/

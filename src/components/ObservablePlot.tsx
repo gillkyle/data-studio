@@ -17,9 +17,11 @@ export function usePlot<T extends object>(params: PlotParams<T>) {
       return;
     }
     const plot = Plot.plot({
+      ...params?.options,
       x: {
         grid: false,
         tickSize: 0,
+        ...params?.options?.x,
       },
       y: {
         ticks: 3,
@@ -27,30 +29,20 @@ export function usePlot<T extends object>(params: PlotParams<T>) {
         legend: true,
         tickSize: 0,
         // make grid lines dotted
+        ...params?.options?.y,
       },
       width: params.width,
       height: params.height,
-      color: { scheme: "burd" },
+      color: {
+        scheme: "category10",
+        ...params?.options?.color,
+      },
       marks: [
         Plot.ruleY([0], {
           strokeOpacity: 0,
         }),
-        Plot["barY"](params.data, {
-          x: "email",
-          y: "total_views",
-          // stroke: "blue",
-          // strokeWidth: 3,
-          // curve: "natural",
-          // strokeDasharray: 6,
-          tip: {
-            pointerSize: 0,
-            stroke: "#ded",
-            textPadding: 12,
-            pathFilter: "drop-shadow(0 0 3px rgba(0, 0, 0, 0.1))",
-          },
-        }),
+        ...(params?.options?.marks || []),
       ],
-      ...params?.options,
     });
     if (containerRef.current) {
       containerRef.current.append(plot);
@@ -69,7 +61,6 @@ export function ObservablePlotBase<T extends object>(props: PlotParams<T>) {
 
 export function ObservablePlot<T extends object>(props: PlotParams<T>) {
   const { parentRef, width, height } = useParentSize({ debounceTime: 150 });
-  console.log({ width, height });
   return (
     <div
       ref={parentRef}
