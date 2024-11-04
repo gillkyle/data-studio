@@ -43,10 +43,10 @@ export function useConfigurationState() {
     "quarter",
     "time",
   ];
-  const dateFields = parsedFields.filter((field) =>
-    DATE_FIELD_NAMES.includes(field.toLowerCase())
-  );
-  console.log(parsedData);
+  const dateFields = parsedFields.filter((field) => {
+    const lowerField = field.toLowerCase();
+    return DATE_FIELD_NAMES.includes(lowerField) || lowerField.includes("date");
+  });
   // transforme the data to include an index as an id field for the data grid, as well as parsing fields to guess default states that sholud be set
   const transformedData = parsedData.map((row, index) => {
     // look for date fields to transform by looking at the field names in lower case, if we see one, parse it as a date so ObservablePlot can use it easier
@@ -73,7 +73,6 @@ export function useConfigurationState() {
 
     return newRow;
   });
-  console.log(transformedData);
 
   const maxYValue = yField
     ? transformedData.reduce((max, row) => {
@@ -81,7 +80,6 @@ export function useConfigurationState() {
         return Math.max(max, row[yField]);
       }, 0)
     : undefined;
-  console.log(maxYValue);
 
   return {
     urlDataString: data,

@@ -10,12 +10,12 @@ import { csvSchema } from "~/core/zod-helpers";
 import { useConfigurationState } from "~/hooks/useConfigurationState";
 
 const studioConfigSchema = z.object({
-  data: csvSchema.catch("").default(""),
   markType: z.enum(["barY", "rectY", "line", "cell", "dot"]).default("barY"),
   xField: z.string().default(""),
   yField: z.string().default(""),
   colorField: z.string().default(""),
   yTickFormat: z.string().default(""),
+  data: csvSchema.catch("").default(""),
 });
 export type StudioConfig = z.infer<typeof studioConfigSchema>;
 
@@ -61,7 +61,18 @@ function HomeComponent() {
             Data Studio
           </Box>
         </Link>{" "}
-        <Button variant="contained" startIcon={<TbShare2 size={16} />}>
+        <Button
+          variant="contained"
+          startIcon={<TbShare2 size={16} />}
+          onClick={() => {
+            // copy the current full URL path to the clipboard
+            navigator.clipboard.writeText(
+              `${window.location.origin}${window.location.pathname}?${new URLSearchParams(
+                window.location.search
+              ).toString()}`
+            );
+          }}
+        >
           Share
         </Button>
       </Box>
@@ -71,10 +82,7 @@ function HomeComponent() {
             width: "350px",
             borderRight: (theme) => `1px solid ${theme.palette.divider}`,
             p: 1,
-            display: "flex",
-            flexDirection: "column",
             overflowY: "auto",
-            gap: 1,
           }}
         >
           <PlotConfigurationForm />

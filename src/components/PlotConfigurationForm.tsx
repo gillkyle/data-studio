@@ -1,12 +1,12 @@
 import {
   Box,
   Button,
+  FilledInput,
   FormControl,
   FormLabel,
   MenuItem,
   Select,
   TextareaAutosize,
-  TextField,
 } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import { Table } from "~/components/Table";
@@ -59,6 +59,11 @@ export function PlotConfigurationForm() {
       <Link
         to="/"
         search={{
+          markType: "rectY",
+          xField: undefined,
+          yField: undefined,
+          colorField: undefined,
+          yTickFormat: undefined,
           data: DUMMY_DATA,
         }}
       >
@@ -128,10 +133,10 @@ export function PlotConfigurationForm() {
       {/* Y-axis Tick Format */}
       <FormControl fullWidth>
         <FormLabel>Y-axis Tick Format</FormLabel>
-        <TextField
+        <FilledInput
           value={plotConfig.yTickFormat}
           onChange={(e) => updateConfig({ yTickFormat: e.target.value })}
-          placeholder="e.g., Plot.formatMonth('en', 'short')"
+          placeholder="~s"
         />
       </FormControl>
 
